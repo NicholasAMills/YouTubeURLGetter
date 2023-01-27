@@ -8,6 +8,8 @@ def call_playlist_items_api(service, playlist_id, next_page_token):
     API 'service' set for playlist items
     Goal: Retrieve video URL's
     Params:
+        service: api service
+        playlist_id: 'uploads' playlist id
         next_page_token: token for multiple pages. Default case set to empty (no value) for first page
     Returns:
         API response
@@ -36,17 +38,21 @@ def call_channels_api(service, channel_id):
     API 'service' set for channels
     Goal: Retrieve "uploads" playlist id to use as a parameter for call_playlist_items_api 
     Params:
+        service: api service
         channel_id: channel id (Must manually search for as of right now)
     Returns:
         API response
     '''
-    request = service.channels().list(
-        part='contentDetails',
-        #   To find ID, make a GET request of the user's channel page (https://www.youtube.com/@UserHere) and check the META data. CTRL+F for 'channelid' and look for something along the lines of <meta itemprop="channelId" content="###############">
-        #   the 'content' value will be found in other tags if it's correct. Should be fairly easy to confirm. Check the bottom-most result
-        id=channel_id
-    )
-    return request.execute()
+    try:
+        request = service.channels().list(
+            part='contentDetails',
+            #   To find ID, make a GET request of the user's channel page (https://www.youtube.com/@UserHere) and check the META data. CTRL+F for 'channelid' and look for something along the lines of <meta itemprop="channelId" content="###############">
+            #   the 'content' value will be found in other tags if it's correct. Should be fairly easy to confirm. Check the bottom-most result
+            id=channel_id
+        )
+        return request.execute()
+    except Exception as e:
+        print("An error occurred in call_channels_api: " + str(e))
 
 def call_videos_api(service, video_id):
     '''
@@ -56,11 +62,14 @@ def call_videos_api(service, video_id):
         service: api service
         video_id: video id to retrieve name from
     '''
-    request = service.videos().list(
-        part='snippet',
-        id=video_id
-    )
-    return request.execute()
+    try:
+        request = service.videos().list(
+            part='snippet',
+            id=video_id
+        )
+        return request.execute()
+    except Exception as e:
+        print("An error occurred in call_videos_api: " + str(e))
 
 try:
     api_key = creds.api_key
