@@ -8,7 +8,7 @@ Purpose: YouTube is deleting old videos that break new guidelines and asking for
 Install the dependencies.
 ```sh
 pip install pandas
-pip.exe install google-api-python-client
+pip install google-api-python-client
 ```
 
 ## Running
@@ -16,7 +16,7 @@ In the creds.py file, set values for
 ```
 api_key => Your api key
 channel_id => YouTube user's unique channel id. Can be found by sending a GET request from the channel and looking at the META tags. CTRL+F 'channelid'
-OUTPUT_FILE =>  What you want your output file to be called
+OUTPUT_FILE =>  Desired location & file name
 ```
 
 Run command: ``` python .\YouTubeURLGetter\YouTubeURLGrabber.py ```
