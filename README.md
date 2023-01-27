@@ -8,6 +8,10 @@ Purpose: YouTube is deleting old videos that break new guidelines and asking for
 Install the dependencies.
 ```sh
 pip install pandas
+pip install virtualenv
+virtualenv <your-env>
+<your-env>\Scripts\activate
+<your-env>\Scripts\pip.exe install google-api-python-client
 ```
 
 ## Running
