@@ -72,6 +72,7 @@ def call_videos_api(service, video_id):
         print("An error occurred in call_videos_api: " + str(e))
 
 try:
+    print("====STARTING JOB====")
     api_key = creds.api_key
     channel_id = creds.channel_id
     service = build('youtube', 'v3', developerKey=api_key)
@@ -92,6 +93,7 @@ try:
     # Will go through at least once
     while has_next_page:
         # Get next page token
+        print('.')
         if 'nextPageToken' in playlist_items_response:
             has_next_page = True
             next_page = playlist_items_response['nextPageToken']
