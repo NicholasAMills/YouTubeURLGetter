@@ -14,7 +14,7 @@ pip install google-api-python-client
 ## Running
 In the creds.py file, set values for 
 ```
-api_key => Your api key
+api_key => Your console.cloud.google.com api key
 channel_id => YouTube user's unique channel id. Can be found by sending a GET request from the channel and looking at the META tags. CTRL+F 'channelid'
 OUTPUT_FILE =>  Desired location & file name
 ```
