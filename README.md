@@ -2,7 +2,7 @@
 ## _Helping YouTube content creators from YouTube's antics_
 
 Retrieve all of a YouTube content creator's videos' title + url and save to a .csv file. 
-Purpose: YouTube is deleting old videos that break new guidelines and asking for a URL for a deleted video if they want it reviewed. This will create a micro .csv database to capture a user's video title and its url to help with this problem.
+Purpose: YouTube is deleting old videos that break new guidelines and if the creator wants to dispute it, they may have to provide the deleted video's URL. This script will use the YouTube v3 API to collect all of a content creator's video's titles + url's from their 'uploads' playlist and then store the results into a .csv file.
 
 ## Installation
 Install the dependencies.
