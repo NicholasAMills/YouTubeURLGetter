@@ -2,7 +2,8 @@
 ## _Helping YouTube content creators from YouTube's antics_
 
 Retrieve all of a YouTube content creator's videos' title + url and save to a .csv file. 
-Purpose: YouTube is deleting old videos that break new guidelines and if the creator wants to dispute it, they may have to provide the deleted video's URL. This script will use the YouTube v3 API to collect all of a content creator's video's titles + url's from their 'uploads' playlist and then store the results into a .csv file.
+
+Purpose: YouTube is deleting and striking old videos that break new guidelines and if the creator wants to dispute it, they may have to provide the deleted video's URL. If the creator doesn't have it on them, they may need to search the internet for any places where the link may have been shared, which may be a hassle. This script is designed to help reduce that headache by using the YouTube v3 API to collect all of a content creator's video's titles + url's from their "uploads" playlist and then store the results into a localized .csv file.
 
 ## Installation
 Install the dependencies.
@@ -12,7 +13,7 @@ pip install google-api-python-client
 ```
 
 ## Running
-In the creds.py file, set values for 
+In the _creds.py_ file, set values for 
 ```
 api_key => Your console.cloud.google.com api key
 channel_id => YouTube user's unique channel id. Can be found by sending a GET request from the channel and looking at the META tags. CTRL+F 'channelid'
