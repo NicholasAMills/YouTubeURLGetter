@@ -71,48 +71,52 @@ def call_videos_api(service, video_id):
     except Exception as e:
         print("An error occurred in call_videos_api: " + str(e))
 
-try:
-    print("====STARTING JOB====")
-    api_key = creds.api_key
-    channel_id = creds.channel_id
-    service = build('youtube', 'v3', developerKey=api_key)
+def main():
+    try:
+        print("====STARTING JOB====")
+        api_key = creds.api_key
+        channel_id = creds.channel_id
+        service = build('youtube', 'v3', developerKey=api_key)
 
-    # Get 'uploads' playlist id
-    channels_response = call_channels_api(service, channel_id)
-    uploads_playlist_id = channels_response['items'][0]['contentDetails']['relatedPlaylists']['uploads']
+        # Get 'uploads' playlist id
+        channels_response = call_channels_api(service, channel_id)
+        uploads_playlist_id = channels_response['items'][0]['contentDetails']['relatedPlaylists']['uploads']
 
-    url_list = []
+        url_list = []
 
-    # Call to first page
-    playlist_items_response = call_playlist_items_api(service, uploads_playlist_id, None)
+        # Call to first page
+        playlist_items_response = call_playlist_items_api(service, uploads_playlist_id, None)
 
-    # Loop breaker. Starting as True to get through loop at least once
-    has_next_page = True
-    # Will go through at least once
-    while has_next_page:
-        print('.')
-        # Work with data
-        for i in playlist_items_response['items']:
-            video_id = i['contentDetails']['videoId']
-            videos_response = call_videos_api(service, video_id)
-            video_title = videos_response['items'][0]['snippet']['title']
-            url_list.append([str(video_title), "youtube.com/watch?v="+str(video_id)])
-        
-        # Check for next page token
-        if 'nextPageToken' in playlist_items_response:
-            next_page = playlist_items_response['nextPageToken']
-            # Update response
-            playlist_items_response = call_playlist_items_api(service, uploads_playlist_id, next_page)
-        else:
-            # Break loop
-            has_next_page = False
+        # Loop breaker. Starting as True to get through loop at least once
+        has_next_page = True
+        # Will go through at least once
+        while has_next_page:
+            print('.')
+            # Work with data
+            for i in playlist_items_response['items']:
+                video_id = i['contentDetails']['videoId']
+                videos_response = call_videos_api(service, video_id)
+                video_title = videos_response['items'][0]['snippet']['title']
+                url_list.append([str(video_title), "youtube.com/watch?v="+str(video_id)])
+            
+            # Check for next page token
+            if 'nextPageToken' in playlist_items_response:
+                next_page = playlist_items_response['nextPageToken']
+                # Update response
+                playlist_items_response = call_playlist_items_api(service, uploads_playlist_id, next_page)
+            else:
+                # Break loop
+                has_next_page = False
 
-    df = pd.DataFrame(url_list, columns=['Title', 'Url'])
-    df.to_csv(creds.OUTPUT_FILE, index=True)
+        df = pd.DataFrame(url_list, columns=['Title', 'Url'])
+        df.to_csv(creds.OUTPUT_FILE, index=True)
 
-    # Close service
-    service.close()
-    print("==========COMPLETE============")
-except Exception as e:
-    print("ERROR: " + str(e))
+        # Close service
+        service.close()
+        print("==========COMPLETE============")
+    except Exception as e:
+        print("ERROR: " + str(e))
 
+if __name__ == "__main__":
+    return_code = main()
+    exit(return_code)
