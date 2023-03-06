@@ -114,8 +114,10 @@ def main():
         # Close service
         service.close()
         print("==========COMPLETE============")
+        return 0
     except Exception as e:
         print("ERROR: " + str(e))
+        return 1
 
 if __name__ == "__main__":
     return_code = main()
