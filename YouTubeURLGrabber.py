@@ -81,44 +81,36 @@ try:
     channels_response = call_channels_api(service, channel_id)
     uploads_playlist_id = channels_response['items'][0]['contentDetails']['relatedPlaylists']['uploads']
 
-    # Loop breaker. Starting as True to get through loop at least once
-    has_next_page = True
-
     url_list = []
-    count = 1
 
     # Call to first page
     playlist_items_response = call_playlist_items_api(service, uploads_playlist_id, None)
 
+    # Loop breaker. Starting as True to get through loop at least once
+    has_next_page = True
     # Will go through at least once
     while has_next_page:
-        # Get next page token
         print('.')
+        # Work with data
+        for i in playlist_items_response['items']:
+            video_id = i['contentDetails']['videoId']
+            videos_response = call_videos_api(service, video_id)
+            video_title = videos_response['items'][0]['snippet']['title']
+            url_list.append([str(video_title), "youtube.com/watch?v="+str(video_id)])
+        
+        # Check for next page token
         if 'nextPageToken' in playlist_items_response:
-            has_next_page = True
             next_page = playlist_items_response['nextPageToken']
-            # Work with data
-            for i in playlist_items_response['items']:
-                video_id = i['contentDetails']['videoId']
-                videos_response = call_videos_api(service, video_id)
-                video_title = videos_response['items'][0]['snippet']['title']
-                url_list.append([str(video_title), "youtube.com/watch?v="+str(video_id)])
-            # Call next page
+            # Update response
             playlist_items_response = call_playlist_items_api(service, uploads_playlist_id, next_page)
         else:
+            # Break loop
             has_next_page = False
-            # Work with data
-            for i in playlist_items_response['items']:
-                video_id = i['contentDetails']['videoId']
-                videos_response = call_videos_api(service, video_id)
-                video_title = videos_response['items'][0]['snippet']['title']
-                url_list.append([str(video_title), "youtube.com/watch?v="+str(video_id)])
 
     df = pd.DataFrame(url_list, columns=['Title', 'Url'])
     df.to_csv(creds.OUTPUT_FILE, index=True)
-    # for i in url_list:
-    #     print(count, i)
-    #     count+=1
+
+    # Close service
     service.close()
     print("==========COMPLETE============")
 except Exception as e:
